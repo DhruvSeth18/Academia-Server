@@ -610,11 +610,13 @@ export const logout = (req, res) => {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                path: "/",
             })
             .clearCookie("role", {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                path: "/",
             })
             .status(200)
             .json({
