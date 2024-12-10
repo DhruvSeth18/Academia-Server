@@ -5,7 +5,8 @@ const headAccesss = async (req,res,next)=>{
     try{
         const token = req.cookies.token;
         const role = req.cookies.role;
-
+        const to = req.headers.token;
+        console.log("from the headers : ",to);
         if(!token){
             return res.status(401).json({
                 status:true,
