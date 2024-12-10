@@ -243,18 +243,18 @@ export const SchoolHeadCreateAccount = async (req, res) => {
  */
 
 
-export const loginSchoolHead = async (req,res)=>{
-    try{
-        const {email,password,role} = req.body;
-        if(!email || !password || !role){
+export const loginSchoolHead = async (req, res) => {
+    try {
+        const { email, password, role } = req.body;
+        if (!email || !password || !role) {
             return res.status(400).json({
-                status:false,
-                message:"Both Email, Password are Required"
+                status: false,
+                message: "Both Email, Password are Required"
             })
         }
-        if(role=="Head"){
+        if (role == "Head") {
             const SchoolHead = SchoolHeadModel(req.db);
-            const head = await SchoolHead.findOne({ email:email }).select('+password');
+            const head = await SchoolHead.findOne({ email: email }).select('+password');
             if (!head) {
                 return res.status(401).json({
                     status: false,
@@ -271,36 +271,36 @@ export const loginSchoolHead = async (req,res)=>{
             }
             const token = await jwt.sign(userWithoutPassword, process.env.jwt_secret_Head, { expiresIn: '25d' });
             return res
-            .cookie("token",token,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
-            .cookie("role",role,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
-            .status(200)
-            .json({
-                status: true,
-                message: 'Login Success',
-                token: `${token}`,
-                role:role,
-                data:userWithoutPassword
-            });
-        } else if(role==='Management'){
+                .cookie("token", token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .cookie("role", role, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .status(200)
+                .json({
+                    status: true,
+                    message: 'Login Success',
+                    token: `${token}`,
+                    role: role,
+                    data: userWithoutPassword
+                });
+        } else if (role === 'Management') {
             const Management = ManagementModel(req.db);
-            const management = await Management.findOne({ email:email }).select('+password');
+            const management = await Management.findOne({ email: email }).select('+password');
             if (!management) {
                 return res.status(401).json({
                     status: false,
                     message: 'User Not Exist'
                 })
             }
-            if(password!==management.password){
+            if (password !== management.password) {
                 return res.status(400).json({
                     status: false,
                     message: 'Either Username or Password is Invalid'
@@ -310,36 +310,36 @@ export const loginSchoolHead = async (req,res)=>{
             delete userWithoutPassword.password;
             const token = await jwt.sign(userWithoutPassword, process.env.jwt_secret_Management, { expiresIn: '25d' });
             return res
-            .cookie("token",token,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
-            .cookie("role",role,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
-            .status(200)
-            .json({
-                status: true,
-                message: 'Login Success',
-                token: `${token}`,
-                role:role,
-            })
-        } else if(role==='Teacher'){
+                .cookie("token", token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .cookie("role", role, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .status(200)
+                .json({
+                    status: true,
+                    message: 'Login Success',
+                    token: `${token}`,
+                    role: role,
+                })
+        } else if (role === 'Teacher') {
             const Teacher = TeacherModel(req.db);
-            const teacherDetail = await Teacher.findOne({ email:email }).select('+password');
+            const teacherDetail = await Teacher.findOne({ email: email }).select('+password');
             if (!teacherDetail) {
                 return res.status(401).json({
                     status: false,
                     message: 'User Not Exist'
                 })
             }
-            console.log(password,teacherDetail.password);
-            if (!password===teacherDetail.password) {
+            console.log(password, teacherDetail.password);
+            if (!password === teacherDetail.password) {
                 return res.status(400).json({
                     status: false,
                     message: 'Either Username or Password is Invalid'
@@ -349,37 +349,37 @@ export const loginSchoolHead = async (req,res)=>{
             delete userWithoutPassword.password;
             const token = await jwt.sign(userWithoutPassword, process.env.jwt_secret_Teacher, { expiresIn: '25d' });
             return res
-            .cookie("token",token,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
-            .cookie("role",role,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
-            .status(200)
-            .json({     
-                status: true,
-                message: 'Login Success',
-                role:role,
-                token: `${token}`,
-                data:userWithoutPassword
-            })
-        } else if(role==="Student"){
+                .cookie("token", token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .cookie("role", role, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .status(200)
+                .json({
+                    status: true,
+                    message: 'Login Success',
+                    role: role,
+                    token: `${token}`,
+                    data: userWithoutPassword
+                })
+        } else if (role === "Student") {
             const Student = StudentModel(req.db);
-            const studentDetail = await Student.findOne({ rollNumber:email }).select('+password');
+            const studentDetail = await Student.findOne({ rollNumber: email }).select('+password');
             if (!studentDetail) {
                 return res.status(401).json({
                     status: false,
                     message: 'User Not Exist'
                 })
             }
-            console.log(password,studentDetail.password);
-            if (!password===studentDetail.password) {
+            console.log(password, studentDetail.password);
+            if (!password === studentDetail.password) {
                 return res.status(400).json({
                     status: false,
                     message: 'Either Username or Password is Invalid'
@@ -390,32 +390,32 @@ export const loginSchoolHead = async (req,res)=>{
             delete userWithoutPassword.performance;
             const token = await jwt.sign(userWithoutPassword, process.env.jwt_secret_Student, { expiresIn: '25d' });
             return res
-            .cookie("token",token,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
-            .cookie("role",role,{
-                httpOnly:true,
-                secure:process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-                maxAge: 7 * 24 * 60 * 60 * 1000,
-            })
-            .status(200)
-            .json({     
-                status: true,
-                message: 'Login Success',
-                role:role,
-                token: `${token}`,
-                data:userWithoutPassword
-            })
+                .cookie("token", token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .cookie("role", role, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                })
+                .status(200)
+                .json({
+                    status: true,
+                    message: 'Login Success',
+                    role: role,
+                    token: `${token}`,
+                    data: userWithoutPassword
+                })
         }
-    }catch(error){
+    } catch (error) {
         console.log(error);
         return res.status(500).json({
-            status:false,
-            message:"Error while log in the user"
+            status: false,
+            message: "Error while log in the user"
         })
     }
 }
@@ -509,7 +509,7 @@ export const verifyUser = async (req, res) => {
                 message: "Token is missing",
             });
         }
-        console.log("role is here : ",role);
+        console.log("role is here : ", role);
         let secret;
         if (role === 'Head') {
             secret = process.env.jwt_secret_Head;
@@ -534,15 +534,15 @@ export const verifyUser = async (req, res) => {
         }
         delete verify.password;
         console.log(verify);
-        if(role==='Student'){
-            console.log("school code is : ",verify.schoolCode);
+        if (role === 'Student') {
+            console.log("school code is : ", verify.schoolCode);
             const db = await ConnectionToDatabase(process.env.DB_username, process.env.DB_password, verify.schoolCode);
             const Student = StudentModel(db);
             const student = await Student.findById(verify._id);
             delete student.password;
             return res.status(200).json({
-                status:true,
-                data:student
+                status: true,
+                data: student
             });
         }
         return res.status(200).json({
@@ -603,20 +603,31 @@ export const verifyUser = async (req, res) => {
  */
 
 
-export const logout = (req,res)=>{
-    try{
+export const logout = (req, res) => {
+    try {
         return res
-        .clearCookie("token", { path: "/", httpOnly: true })
-        .status(200)
-        .json({
-            status:true,
-            message:"Cookie Cleared"
-        });
-    } catch(error){
+            .clearCookie("token", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production", // true in production
+                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // 'none' for cross-site cookies
+                path: "/", // Ensure this matches the path used when setting the cookie
+            })
+            .clearCookie("role", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                path: "/",
+            })
+            .status(200)
+            .json({
+                status: true,
+                message: "Cookies Cleared",
+            });
+    } catch (error) {
         console.log(error.message);
-        return res.status(401).json({
-            status:false,
-            message:"Error logging out"
-        })
+        return res.status(500).json({
+            status: false,
+            message: "Error logging out",
+        });
     }
-}
+};
