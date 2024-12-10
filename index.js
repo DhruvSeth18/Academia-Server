@@ -66,6 +66,13 @@ app.use('/api', studentRoutes);
 app.use('/api', attendenceRoutes);
 app.use('/api', managementRoutes);
 
+app.get('/',(req,res)=>{
+    return res.status(200).json({
+        status:"success",
+        message:"website is working"
+    })
+});
+
 const port = process.env.PORT || 8000;
 
 
