@@ -607,14 +607,16 @@ export const logout = (req, res) => {
     try {
         return res
             .clearCookie("token", {
-                secure: process.env.NODE_ENV === "production",
-                sameSite: 'None',
+                secure: process.env.NODE_ENV === "production", // only use 'secure' for production (HTTPS)
+                sameSite: 'None', // Necessary for cross-origin cookies
                 path: "/",
+                httpOnly: true, // Adds httpOnly flag for security
             })
             .clearCookie("role", {
                 secure: process.env.NODE_ENV === "production",
                 sameSite: 'None',
                 path: "/",
+                httpOnly: true,
             })
             .status(200)
             .json({

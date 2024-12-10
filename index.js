@@ -27,7 +27,7 @@ const limiter = rateLimiter({
 app.use(helmet());
 app.use(
     cors({
-        origin: ["https://academia-front-end.vercel.app","http://localhost:3000", "http://localhost:5173"],
+        origin: "https://academia-front-end.vercel.app",
         credentials: true,
     })
 );
