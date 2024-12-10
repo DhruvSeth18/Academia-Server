@@ -607,13 +607,11 @@ export const logout = (req, res) => {
     try {
         return res
             .clearCookie("token", {
-                httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: 'None',
                 path: "/",
             })
             .clearCookie("role", {
-                httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: 'None',
                 path: "/",
