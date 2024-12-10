@@ -609,13 +609,13 @@ export const logout = (req, res) => {
             .clearCookie("token", {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                sameSite: 'None',
                 path: "/",
             })
             .clearCookie("role", {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+                sameSite: 'None',
                 path: "/",
             })
             .status(200)
