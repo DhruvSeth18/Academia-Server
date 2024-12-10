@@ -495,7 +495,7 @@ export const loginSchoolHead = async (req, res) => {
 
 export const verifyUser = async (req, res) => {
     try {
-        const role = req.cookies.role;
+        const role = req.headers.role;
         const to = req.headers.token;
         console.log("from the headers : ",to);
         if (!role) {

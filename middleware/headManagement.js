@@ -4,10 +4,10 @@ import jwt from 'jsonwebtoken';
 
 const HeadManagement = async (req, res, next) => {
     try {
-        const token = req.cookies.token;
-        const role = req.cookies.role;
-        const to = req.headers.token;
-        console.log("from the headers : ",to);
+        // const token = req.cookies.token;
+        // const role = req.cookies.role;
+        const token = req.headers.token;
+        const role = req.headers.role;
         if (!token) {
             return res.status(401).json({
                 status: false,
